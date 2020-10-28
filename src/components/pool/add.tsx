@@ -13,7 +13,7 @@ import "./add.less";
 import { PoolConfig } from "../../models";
 import { SWAP_PROGRAM_OWNER_FEE_ADDRESS } from "../../utils/ids";
 
-import { useCurrencyPairState } from "./../../utils/currencyPair";
+import { useCurrencyPairState } from "../../utils/currencyPair";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -32,7 +32,7 @@ export const AddToLiquidity = () => {
     ownerTradeFeeDenominator: DEFAULT_DENOMINATOR,
     ownerWithdrawFeeNumerator: 0,
     ownerWithdrawFeeDenominator: DEFAULT_DENOMINATOR,
-  });
+  })
 
   const provideLiquidity = async () => {
     if (A.account && B.account && A.mint && B.mint) {
@@ -54,7 +54,8 @@ export const AddToLiquidity = () => {
         .then(() => {
           setPendingTx(false);
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log("Transaction failed", e);
           notify({
             description:
               "Please try again and approve transactions from your wallet",

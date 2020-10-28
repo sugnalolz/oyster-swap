@@ -17,7 +17,6 @@ const PoolItem = (props: {
   const { A, B } = useCurrencyPairState();
   const item = props.item;
   const mint = useMint(item.account.info.mint.toBase58());
-
   const amount =
     item.account.info.amount.toNumber() / Math.pow(10, mint?.decimals || 0);
 
