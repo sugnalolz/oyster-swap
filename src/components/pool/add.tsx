@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { addLiquidity, usePoolForBasket } from '../../utils/pools';
-import { Button, Dropdown, Popover } from 'antd';
-import { useWallet } from '../../utils/wallet';
-import { useConnection, useSlippageConfig } from '../../utils/connection';
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-import { notify } from '../../utils/notifications';
-import { SupplyOverview } from './supplyOverview';
-import { CurrencyInput } from '../currencyInput';
-import { DEFAULT_DENOMINATOR, PoolConfigCard } from './config';
-import './add.less';
-import { PoolConfig } from '../../models';
-import { SWAP_PROGRAM_OWNER_FEE_ADDRESS } from '../../utils/ids';
+import React, { useState } from "react";
+import { addLiquidity, usePoolForBasket } from "../../utils/pools";
+import { Button, Dropdown, Popover } from "antd";
+import { useWallet } from "../../utils/wallet";
+import { useConnection, useSlippageConfig } from "../../utils/connection";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { notify } from "../../utils/notifications";
+import { SupplyOverview } from "./supplyOverview";
+import { CurrencyInput } from "../currencyInput";
+import { DEFAULT_DENOMINATOR, PoolConfigCard } from "./config";
+import "./add.less";
+import { PoolConfig } from "../../models";
+import { SWAP_PROGRAM_OWNER_FEE_ADDRESS } from "../../utils/ids";
 
-import { useCurrencyPairState } from './../../utils/currencyPair';
+import { useCurrencyPairState } from "./../../utils/currencyPair";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -32,7 +32,7 @@ export const AddToLiquidity = () => {
     ownerTradeFeeDenominator: DEFAULT_DENOMINATOR,
     ownerWithdrawFeeNumerator: 0,
     ownerWithdrawFeeDenominator: DEFAULT_DENOMINATOR,
-  })
+  });
 
   const provideLiquidity = async () => {
     if (A.account && B.account && A.mint && B.mint) {
@@ -41,100 +41,126 @@ export const AddToLiquidity = () => {
         {
           account: A.account,
           mintAddress: A.mintAddress,
-          amount: A.convertAmount()
+          amount: A.convertAmount(),
         },
         {
           account: B.account,
           mintAddress: B.mintAddress,
-          amount: B.convertAmount()
-        }
+          amount: B.convertAmount(),
+        },
       ];
 
-      addLiquidity(connection, wallet, components, slippage, pool, options).then(() => {
-        setPendingTx(false);
-      }).catch(() => {
-        notify({
-          description: 'Please try again and approve transactions from your wallet',
-          message: 'Adding liquidity cancelled.',
-          type: 'error'
+      addLiquidity(connection, wallet, components, slippage, pool, options)
+        .then(() => {
+          setPendingTx(false);
+        })
+        .catch(() => {
+          notify({
+            description:
+              "Please try again and approve transactions from your wallet",
+            message: "Adding liquidity cancelled.",
+            type: "error",
+          });
+          setPendingTx(false);
         });
-        setPendingTx(false);
-      });
     }
   };
 
-
-  const createPoolButton = SWAP_PROGRAM_OWNER_FEE_ADDRESS ?
+  const createPoolButton = SWAP_PROGRAM_OWNER_FEE_ADDRESS ? (
     <Button
       className="add-button"
       onClick={provideLiquidity}
-      disabled={pendingTx || !A.account || !B.account || A.account === B.account}
+      disabled={
+        pendingTx || !A.account || !B.account || A.account === B.account
+      }
       type="primary"
-      size="large">
+      size="large"
+    >
       Create Liquidity Pool
-            {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
-    </Button> :
+      {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
+    </Button>
+  ) : (
     <Dropdown.Button
       className="add-button"
       onClick={provideLiquidity}
-      disabled={pendingTx || !A.account || !B.account || A.account === B.account}
+      disabled={
+        pendingTx || !A.account || !B.account || A.account === B.account
+      }
       type="primary"
       size="large"
-      overlay={<PoolConfigCard options={options} setOptions={setOptions} />}>
+      overlay={<PoolConfigCard options={options} setOptions={setOptions} />}
+    >
       Create Liquidity Pool
-            {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
-    </Dropdown.Button>;
+      {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
+    </Dropdown.Button>
+  );
 
-  return <div>
-    <Popover trigger="hover" content={
-      <div style={{ width: 300 }}>
-        Liquidity providers earn a fixed percentage fee on all trades proportional to their share of the pool.
-        Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
-        </div>}>
-      <Button type="text">Read more about providing liquidity.</Button>
-    </Popover>
-
-    <CurrencyInput
-      title="Input"
-      onInputChange={(val: any) => {
-        if (A.amount !== val) {
-          setLastTypedAccount(A.mintAddress);
+  return (
+    <div>
+      <Popover
+        trigger="hover"
+        content={
+          <div style={{ width: 300 }}>
+            Liquidity providers earn a fixed percentage fee on all trades
+            proportional to their share of the pool. Fees are added to the pool,
+            accrue in real time and can be claimed by withdrawing your
+            liquidity.
+          </div>
         }
+      >
+        <Button type="text">Read more about providing liquidity.</Button>
+      </Popover>
 
-        A.setAmount(val);
-      }}
-      amount={A.amount}
-      mint={A.mintAddress}
-      onMintChange={(item) => {
-        A.setMint(item);
-      }}
-    />
-    <div>+</div>
-    <CurrencyInput
-      title="Input"
-      onInputChange={(val: any) => {
-        if (B.amount !== val) {
-          setLastTypedAccount(B.mintAddress);
-        }
+      <CurrencyInput
+        title="Input"
+        onInputChange={(val: any) => {
+          if (A.amount !== val) {
+            setLastTypedAccount(A.mintAddress);
+          }
 
-        B.setAmount(val);
-      }}
-      amount={B.amount}
-      mint={B.mintAddress}
-      onMintChange={(item) => {
-        B.setMint(item);
-      }}
-    />
-    <SupplyOverview mintAddress={[A.mintAddress, B.mintAddress]} pool={pool} />
-    {pool && <Button
-      className="add-button"
-      type="primary"
-      size="large"
-      onClick={provideLiquidity}
-      disabled={pendingTx || !A.account || !B.account || A.account === B.account}>
-      Provide Liquidity
-            {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
-    </Button>}
-    {!pool && createPoolButton}
-  </div>;
+          A.setAmount(val);
+        }}
+        amount={A.amount}
+        mint={A.mintAddress}
+        onMintChange={(item) => {
+          A.setMint(item);
+        }}
+      />
+      <div>+</div>
+      <CurrencyInput
+        title="Input"
+        onInputChange={(val: any) => {
+          if (B.amount !== val) {
+            setLastTypedAccount(B.mintAddress);
+          }
+
+          B.setAmount(val);
+        }}
+        amount={B.amount}
+        mint={B.mintAddress}
+        onMintChange={(item) => {
+          B.setMint(item);
+        }}
+      />
+      <SupplyOverview
+        mintAddress={[A.mintAddress, B.mintAddress]}
+        pool={pool}
+      />
+      {pool && (
+        <Button
+          className="add-button"
+          type="primary"
+          size="large"
+          onClick={provideLiquidity}
+          disabled={
+            pendingTx || !A.account || !B.account || A.account === B.account
+          }
+        >
+          Provide Liquidity
+          {pendingTx && <Spin indicator={antIcon} className="add-spinner" />}
+        </Button>
+      )}
+      {!pool && createPoolButton}
+    </div>
+  );
 };
