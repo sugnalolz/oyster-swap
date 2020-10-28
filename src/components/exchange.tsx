@@ -36,6 +36,15 @@ export const ExchangeView = (props: {}) => {
         <div className="App-logo" />
       </div>
       <div className="App-Bar-right">
+        <Button type="text" size="large" style={{ color: "#2abdd2" }}>
+          <a
+            href={"https://dex.projectserum.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Trade
+          </a>
+        </Button>
         <AccountInfo />
         {connected && (
           <Popover
@@ -46,7 +55,6 @@ export const ExchangeView = (props: {}) => {
             <Button type="text">My Pools</Button>
           </Popover>
         )}
-
         <div>
           {!connected && (
             <Button

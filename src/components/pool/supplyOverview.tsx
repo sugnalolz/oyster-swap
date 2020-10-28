@@ -48,7 +48,7 @@ const useMidPriceInUSD = (mint: string) => {
     const marketName = `${SERUM_TOKEN?.name}/USDC`;
     const marketInfo = MARKETS.find((m) => m.name === marketName);
 
-    if (SERUM_TOKEN?.name === "USDC") {
+    if (SERUM_TOKEN?.name === "USDC" || SERUM_TOKEN?.name === "USDT") {
       setIsBase(true);
       setPrice(1.0);
       return;

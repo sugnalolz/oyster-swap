@@ -78,7 +78,6 @@ export const CurrencyInput = (props: {
   const renderAdditionalTokens = [...grouppedUserAccounts.keys()].map(
     (mint) => {
       const list = grouppedUserAccounts.get(mint);
-
       if (!list || list.length <= 0) {
         return undefined;
       }

@@ -63,7 +63,6 @@ export const PoolAccounts = () => {
   return (
     <>
       <div>Your Liquidity</div>
-
       <ConfigProvider
         renderEmpty={() => (
           <Empty
