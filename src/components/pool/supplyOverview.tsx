@@ -32,6 +32,8 @@ const renderCustomizedLabel = (props: any, data: any) => {
   );
 };
 
+const STABLE_COINS = new Set(["USDC", "wUSDC", "USDT"]);
+
 const useMidPriceInUSD = (mint: string) => {
   const connection = useMemo(
     () => new Connection(ENDPOINTS[0].endpoint, "recent"),
@@ -48,7 +50,7 @@ const useMidPriceInUSD = (mint: string) => {
     const marketName = `${SERUM_TOKEN?.name}/USDC`;
     const marketInfo = MARKETS.find((m) => m.name === marketName);
 
-    if (SERUM_TOKEN?.name === "USDC" || SERUM_TOKEN?.name === "USDT") {
+    if (STABLE_COINS.has(SERUM_TOKEN?.name || "")) {
       setIsBase(true);
       setPrice(1.0);
       return;

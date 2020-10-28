@@ -7,11 +7,7 @@ import {
   isKnownMint,
   KnownToken,
 } from "../../utils/utils";
-import {
-  useUserAccounts,
-  useMint,
-  useCachedPool,
-} from "../../utils/accounts";
+import { useUserAccounts, useMint, useCachedPool } from "../../utils/accounts";
 import "./styles.less";
 import { useConnectionConfig } from "../../utils/connection";
 import { PoolIcon, TokenIcon } from "../tokenIcon";
